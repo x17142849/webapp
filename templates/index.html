@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ title }}</title>
+		<!-- Bootstrap core CSS-->
+		<link href="{{ url_for('static',filename='styles/bootstrap.css') }}" rel="stylesheet">
+                
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+		</head>
+		<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+                <a href="http://localhost" class="navbar-brand">Smart Doorbell</a>
+			</div>
+			<div class="navbar-header">
+                <a href="logout" class="navbar-brand">Logout</a>
+			</div>
+					<!-- /.nav-collapse-->
+		</div>
+	</nav>
+			<div class="container">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3">
+							<h2>Door Web Control</h2>
+							<p>
+							<script type=text/javascript>
+								$(
+								// When the LED button is flipped (change)
+								// do an ajax request to server to change LED state
+								function() 
+								{
+									$('#flip-1').change(function() 
+									{
+									$.getJSON('/led', {state: $('#flip-1').val()});
+									});     
+								}
+								);
+
+								$(
+								// periodically (500ms) do an ajax request to get the button state
+								// modify the span tag to reflect the state (pressed or not)
+								// the state text comes from the JSON string returned by the server
+								function button() 
+								{
+									$.getJSON('/_button', function(data)
+										{
+											$("#buttonState").text(data.buttonState);
+											setTimeout(function(){button();},500);
+										});
+                                                                                        $.getJSON('/_button', {emailState: $('#email_msg').val()});
+                                                                                        $.getJSON('/_button', {smsState: $('#sms').val()});
+
+								}
+								);
+
+							 $(
+								// When the door button is pressed (change)
+								// do an ajax request to server to change door state
+								function()
+								{
+									$('#email_msg').change(function()
+									{
+									$.getJSON('/_button', {emailState: $('#email_msg').val()});
+									});
+								}
+								);
+
+							 $(
+								// When the door button is pressed (change)
+								// do an ajax request to server to change door state
+								function()
+								{
+									$('#sms').change(function()
+									{
+									$.getJSON('/_button', {smsState: $('#sms').val()});
+									});
+								}
+								);
+
+					
+
+							//------------------------------------------------
+                                                         
+									$( function(){                                                                
+										//function to start and stop video                                                                
+                                                                        $('#startVideo').click(function(){
+
+                                                                              $.getJSON('/video_feed', {videoState: $('#startVideo').val()});
+                                                                        
+                                                                         });
+                                                                         });
+
+										//stop video
+
+                                                                        $( function(){
+                                                                                //function to start and stop video                                                            $
+                                                                        $('#stopVideo').click(function(){
+
+                                                                              $.getJSON('/video_feed', {videoState: $('#stopVideo').val()});
+
+                                                                         });
+                                                                         });
+
+                                                                
+							//----------------------------------------------
+
+                                                                        $( function(){
+
+                                                                       $('.door').click(function(){
+                                                                            $.getJSON('/door', {doorState: $('.door').val()});
+
+                                                                            if($(this).text() == "Lock the door") {
+
+                                                                                $(this).text("Unlock the door")
+                                                                             } else {
+
+                                                                                $(this).text("Lock the door")
+                                                                             }
+                                                                              
+
+                                                                         });
+                                                                         });
+
+
+								//--------------------------------------------------
+/*
+
+                                                                        $( function(){
+
+                                                                       $('.video').click(function(){
+                                                                            $.getJSON('/video_feed', {videoState: $('.video').val()});
+
+                                                                            if($(this).text() == "Start Video") {
+
+                                                                                $(this).text("Stop Video")
+                                                                             } else {
+
+                                                                                $(this).text("Start Video")
+                                                                             }
+
+
+                                                                         });
+                                                                         });  */
+
+								
+
+														</script>
+
+
+								<div data-role="content" data-theme="b">
+								  <div data-role="content">
+									<form>
+									<p>The button is <span id="buttonState"></span></p>
+									<br>
+									<select name="flip-1" id="flip-1" data-role="slider" style="float: left;">
+										<option value="off">LED off</option>
+										<option value="on">LED on</option>
+									</select>
+
+									<select name="email_msg" id="email_msg" data-role="slider" style="float: left;">
+										<option value="email-off">Email Off</option>
+										<option value="email-on">Email On</option>
+									</select>
+									
+									<select name="sms" id="sms" data-role="slider" style="float: left;" onChange="videoView(this);">
+										<option value="sms-off"  >SMS Off</option>
+										<option value="sms-on" >SMS On</option>
+									</select>  									
+<!--
+    <button id="startVideo" data-role="button" type="button"  onclick="tend()" value="start" class="btn btn-primary" autofocus="autofocus">Start Video</button>
+    <button id="stopVideo" type="button"  onclick="tn()" value="Stop" class="btn btn-primary">Stop Video</button>
+-->
+
+
+
+									</form>
+								  </div>
+<div data-role="controlgroup" data-type="horizontal">
+<button class="door" value="locked" onclick="return changeValue(this);" autofocus="autofocus" data-role="button">Lock the Door</button>
+<button class="video" value="on" onclick="return tend(this);">Stop Video</button>								  
+</div>								
+								</div>
+								</p>
+
+
+	
+							</p>
+						</div>
+						<div class="col-md-4">
+							<h2>Live Video Streaming</h2><p>
+							
+							<!--   <img src="{{ url_for('video_feed') }}" style="width:100%"> -->
+
+
+
+
+
+    <img src ="{{ url_for('video_feed') }}" id="my" visibility:hidden" style="width:100%"/>
+    <script type="text/javascript">
+      function tend(el) {
+	if(el.value == "on"){
+		el.value = "off";
+        	document.getElementById('my').style.visibility='visible';
+        }else{
+               el.value = "on";
+              document.getElementById('my').style.visibility='hidden';
+        }
+      }
+
+
+	function changeValue(el){
+		if(el.value == "locked")
+			el.value = "open";
+		else
+			el.value = "locked";
+	}
+    </script>
+
+								</p>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+				<footer>
+
+
+ <div data-role="footer">
+    <div><h4 class="text-center">Smart Doorbell has been {{uptime}}</h4></div>
+  </div>
+
+
+					<p class="text-center">© 2018 NCI, Inc.</p>
+				</footer>
+				<!-- /container-->
+			</body>
+		</html>
