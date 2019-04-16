@@ -8,7 +8,7 @@ MarkupSafe==0.23
 Naked==0.1.31
 nexmo==2.0.0
 ordereddict==1.1
-pycrypto==2.6.1
+pycrypto>=2.6.1
 python-jose==1.2.0
 PyYAML==4.2b1
 requests==2.20.0
